@@ -7,7 +7,7 @@ import (
 	"errors"
 	"github.com/ginuerzh/gosocks5"
 	"github.com/golang/glog"
-	ss "github.com/shadowsocks/shadowsocks-go/shadowsocks"
+	ss "github.com/ARwMq9b6/libgost/vendors/github.com/shadowsocks/shadowsocks-go/shadowsocks"
 	"net"
 	"net/http"
 	"net/http/httputil"

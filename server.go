@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"github.com/ginuerzh/gosocks5"
 	"github.com/golang/glog"
-	ss "github.com/shadowsocks/shadowsocks-go/shadowsocks"
+	ss "github.com/ARwMq9b6/libgost/vendors/github.com/shadowsocks/shadowsocks-go/shadowsocks"
 	"io"
 	"net"
 	"net/http"
