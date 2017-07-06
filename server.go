@@ -17,7 +17,7 @@ type ProxyServer struct {
 	Node      ProxyNode
 	Chain     *ProxyChain
 	TLSConfig *tls.Config
-	selector  *serverSelector
+	Selector  *serverSelector
 	cipher    *ss.Cipher
 	ota       bool
 }
@@ -54,7 +54,7 @@ func NewProxyServer(node ProxyNode, chain *ProxyChain, config *tls.Config) *Prox
 		Node:      node,
 		Chain:     chain,
 		TLSConfig: config,
-		selector: &serverSelector{ // socks5 server selector
+		Selector: &serverSelector{ // socks5 server selector
 			// methods that socks5 server supported
 			methods: []uint8{
 				gosocks5.MethodNoAuth,
@@ -163,7 +163,7 @@ func (s *ProxyServer) handleConn(conn net.Conn) {
 		NewHttpServer(conn, s).HandleRequest(req)
 		return
 	case "socks", "socks5":
-		conn = gosocks5.ServerConn(conn, s.selector)
+		conn = gosocks5.ServerConn(conn, s.Selector)
 		req, err := gosocks5.ReadRequest(conn)
 		if err != nil {
 			glog.V(LWARNING).Infoln("[socks5]", err)
@@ -194,12 +194,12 @@ func (s *ProxyServer) handleConn(conn net.Conn) {
 		}
 		// TODO: use gosocks5.ServerConn
 		methods := b[2 : 2+mn]
-		method := s.selector.Select(methods...)
+		method := s.Selector.Select(methods...)
 		if _, err := conn.Write([]byte{gosocks5.Ver5, method}); err != nil {
 			glog.V(LWARNING).Infoln("[socks5] select:", err)
 			return
 		}
-		c, err := s.selector.OnSelected(method, conn)
+		c, err := s.Selector.OnSelected(method, conn)
 		if err != nil {
 			glog.V(LWARNING).Infoln("[socks5] onselected:", err)
 			return
